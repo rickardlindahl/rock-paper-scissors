@@ -19,7 +19,7 @@ describe("Create Game endpoint", () => {
   });
 
   const assertRouteNotFound = (path: string, httpMethod: HttpMethod) => {
-    describe(httpMethod, () => {
+    describe(`${httpMethod} method`, () => {
       it("responds with 404", async () => {
         const res = await server.inject({
           method: httpMethod,
@@ -34,13 +34,84 @@ describe("Create Game endpoint", () => {
     assertRouteNotFound(createGamePath, httpMethod);
   });
 
-  describe(HttpMethod.Post, () => {
-    it("responds with 501", async () => {
-      const res = await server.inject({
-        method: HttpMethod.Post,
-        url: createGamePath,
+  describe(`${HttpMethod.Post} method`, () => {
+    describe("Without a payload", () => {
+      it("responds with 400", async () => {
+        const res = await server.inject({
+          method: HttpMethod.Post,
+          url: createGamePath,
+          payload: undefined,
+        });
+        expect(res.result).to.equal({
+          statusCode: 400,
+          error: "Bad Request",
+          message: "Invalid request payload input",
+        });
       });
-      expect(res.statusCode).to.equal(501);
+    });
+
+    describe("Non-JSON payload", () => {
+      it("responds with 400", async () => {
+        const res = await server.inject({
+          method: HttpMethod.Post,
+          url: createGamePath,
+          payload: "Not JSON",
+        });
+        expect(res.result).to.equal({
+          statusCode: 400,
+          error: "Bad Request",
+          message: "Invalid request payload JSON format",
+        });
+      });
+    });
+
+    describe("Valid JSON without a name property", () => {
+      it("responds with 400", async () => {
+        const res = await server.inject({
+          method: HttpMethod.Post,
+          url: createGamePath,
+          payload: {
+            foo: "bar",
+          },
+        });
+        expect(res.result).to.equal({
+          statusCode: 400,
+          error: "Bad Request",
+          message: "Invalid request payload input",
+        });
+      });
+    });
+
+    describe("Valid JSON with an empty name", () => {
+      it("responds with 400", async () => {
+        const res = await server.inject({
+          method: HttpMethod.Post,
+          url: createGamePath,
+          payload: {
+            name: "",
+          },
+        });
+        expect(res.result).to.equal({
+          statusCode: 400,
+          error: "Bad Request",
+          message: "Invalid request payload input",
+        });
+      });
+    });
+
+    describe("Valid JSON with too long name", () => {
+      it(" responds with 400", async () => {
+        const res = await server.inject({
+          method: HttpMethod.Post,
+          url: createGamePath,
+          payload: {
+            name: new Array(255 + 1).join("a"),
+          },
+        });
+
+        expect(res.statusCode).to.equal(200);
+        expect(res.payload).to.be.a.string();
+      });
     });
   });
 });

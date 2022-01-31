@@ -19,7 +19,7 @@ describe("Get Game endpoint", () => {
   });
 
   const assertRouteNotFound = (path: string, httpMethod: HttpMethod) => {
-    describe(httpMethod, () => {
+    describe(`${httpMethod} method`, () => {
       it("responds with 404", async () => {
         const res = await server.inject({
           method: httpMethod,
