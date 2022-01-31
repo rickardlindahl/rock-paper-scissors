@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Rock Paper Scissors Node.js backend implemented in (TypeScript)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rickard Lindahl",
+  "license": "ISC"
+}
