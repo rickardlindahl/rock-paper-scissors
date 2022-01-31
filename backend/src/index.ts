@@ -1,4 +1,4 @@
-import { init } from "./server";
+import { init } from "./api/server";
 
 const runApp = async () => {
   const server = await init();
