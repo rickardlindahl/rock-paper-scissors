@@ -45,48 +45,48 @@ describe("Rock Paper Scissors API", () => {
     });
   });
 
-  describe(`${ApiPath.GamesId} endpoint`, () => {
+  describe(`${ApiPath.GameWithId} endpoint`, () => {
     [HttpMethod.Delete, HttpMethod.Options, HttpMethod.Patch, HttpMethod.Put, HttpMethod.Post].map(httpMethod => {
-      assertRouteNotFound(ApiPath.GamesId, httpMethod);
+      assertRouteNotFound(ApiPath.GameWithId, httpMethod);
     });
 
     describe(HttpMethod.Get, () => {
       it("responds with 501", async () => {
         const res = await server.inject({
           method: HttpMethod.Get,
-          url: ApiPath.GamesId,
+          url: ApiPath.GameWithId,
         });
         expect(res.statusCode).to.equal(501);
       });
     });
   });
 
-  describe(`${ApiPath.GamesIdJoin} endpoint`, () => {
+  describe(`${ApiPath.JoinGameWithId} endpoint`, () => {
     [HttpMethod.Delete, HttpMethod.Get, HttpMethod.Options, HttpMethod.Patch, HttpMethod.Put].map(httpMethod => {
-      assertRouteNotFound(ApiPath.GamesIdJoin, httpMethod);
+      assertRouteNotFound(ApiPath.JoinGameWithId, httpMethod);
     });
 
     describe(HttpMethod.Post, () => {
       it("responds with 501", async () => {
         const res = await server.inject({
           method: HttpMethod.Post,
-          url: ApiPath.GamesIdJoin,
+          url: ApiPath.JoinGameWithId,
         });
         expect(res.statusCode).to.equal(501);
       });
     });
   });
 
-  describe(`${ApiPath.GamesIdMove} endpoint`, () => {
+  describe(`${ApiPath.MoveGameWithId} endpoint`, () => {
     [HttpMethod.Delete, HttpMethod.Get, HttpMethod.Options, HttpMethod.Patch, HttpMethod.Put].map(httpMethod => {
-      assertRouteNotFound(ApiPath.GamesIdMove, httpMethod);
+      assertRouteNotFound(ApiPath.MoveGameWithId, httpMethod);
     });
 
     describe(HttpMethod.Post, () => {
       it("responds with 501", async () => {
         const res = await server.inject({
           method: HttpMethod.Post,
-          url: ApiPath.GamesIdMove,
+          url: ApiPath.MoveGameWithId,
         });
         expect(res.statusCode).to.equal(501);
       });

@@ -4,9 +4,9 @@ import { HttpMethod } from "../types/http";
 
 export enum ApiPath {
   Games = "/api/games",
-  GamesId = "/api/games/{id}",
-  GamesIdJoin = "/api/games/{id}/join",
-  GamesIdMove = "/api/games/{id}/move",
+  GameWithId = "/api/games/{id}",
+  JoinGameWithId = "/api/games/{id}/join",
+  MoveGameWithId = "/api/games/{id}/move",
 }
 
 export const init = async () => {
@@ -17,7 +17,7 @@ export const init = async () => {
 
   server.route({
     method: HttpMethod.Post,
-    path: ApiPath.GamesIdJoin,
+    path: ApiPath.JoinGameWithId,
     handler: () => {
       return Boom.notImplemented("method not implemented");
     },
@@ -25,7 +25,7 @@ export const init = async () => {
 
   server.route({
     method: HttpMethod.Post,
-    path: ApiPath.GamesIdMove,
+    path: ApiPath.MoveGameWithId,
     handler: () => {
       return Boom.notImplemented("method not implemented");
     },
@@ -33,7 +33,7 @@ export const init = async () => {
 
   server.route({
     method: HttpMethod.Get,
-    path: ApiPath.GamesId,
+    path: ApiPath.GameWithId,
     handler: () => {
       return Boom.notImplemented("method not implemented");
     },
