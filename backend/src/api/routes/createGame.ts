@@ -1,7 +1,10 @@
 import * as Hapi from "@hapi/hapi";
 import * as Joi from "joi";
 import { v4 as uuidv4 } from "uuid";
-import { CreateGameResponse, Player } from "../../types/game";
+import { createGame } from "../../game";
+import { store } from "../../store";
+import { Player } from "../../types/game";
+import { HapiRequest } from "../../types/hapi";
 import { HttpMethod } from "../../types/http";
 
 export const createGamePath = "/api/games";
@@ -9,12 +12,16 @@ export const createGamePath = "/api/games";
 export const createGameRoute: Hapi.ServerRoute = {
   method: HttpMethod.Post,
   path: createGamePath,
-  handler: () => {
-    const response: CreateGameResponse = {
-      id: uuidv4(),
-    };
+  handler: (req: HapiRequest<Player>) => {
+    const player = req.payload;
 
-    return response;
+    const game = createGame(uuidv4(), player);
+
+    store.set(game.id, game);
+
+    return {
+      id: game.id,
+    };
   },
   options: {
     validate: {
