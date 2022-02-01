@@ -25,54 +25,50 @@ export enum Outcome {
   Draw = "DRAW",
 }
 
-export interface RockPaperScissorsGame {
+export type Players = [] | [Player] | [Player, Player];
+
+export type Moves = [] | [PlayerMove] | [PlayerMove, PlayerMove];
+
+export type Result = undefined | { outcome: Outcome.Draw } | { outcome: Outcome.Winner; winner: Player };
+
+export interface RockPaperScissorsGame<S extends State, P = Players, M = Moves, R = Result> {
   id: string;
-  state: State;
-  players: [] | [Player] | [Player, Player];
-  moves: [] | [PlayerMove] | [PlayerMove, PlayerMove];
-  result: undefined | { outcome: Outcome.Draw; winner: undefined } | { outcome: Outcome.Winner; winner: Player };
+  state: S;
+  players: P;
+  moves: M;
+  result: R;
 }
 
-export interface GameWaitingForPlayerToJoin extends RockPaperScissorsGame {
-  state: State.WaitingForPlayerToJoin;
-  players: [Player];
-  moves: [];
-  result: undefined;
-}
+export type GameWaitingForPlayerToJoin = RockPaperScissorsGame<State.WaitingForPlayerToJoin, [Player], [], undefined>;
 
-export interface GameWaitingForFirstMove extends RockPaperScissorsGame {
-  state: State.WaitingForFirstMove;
-  players: [Player, Player];
-  moves: [];
-  result: undefined;
-}
+export type GameWaitingForFirstMove = RockPaperScissorsGame<State.WaitingForFirstMove, [Player, Player], [], undefined>;
 
-export interface GameWaitingForSecondMove extends RockPaperScissorsGame {
-  state: State.WaitingForSecondMove;
-  players: [Player, Player];
-  moves: [PlayerMove];
-  result: undefined;
-}
+export type GameWaitingForSecondMove = RockPaperScissorsGame<
+  State.WaitingForSecondMove,
+  [Player, Player],
+  [PlayerMove],
+  undefined
+>;
 
-export interface GameFinishedAsDraw extends RockPaperScissorsGame {
-  state: State.Finished;
-  players: [Player, Player];
-  moves: [PlayerMove, PlayerMove];
-  result: {
+export type GameFinishedAsDraw = RockPaperScissorsGame<
+  State.Finished,
+  [Player, Player],
+  [PlayerMove, PlayerMove],
+  {
     outcome: Outcome.Draw;
     winner: undefined;
-  };
-}
+  }
+>;
 
-export interface GameFinishedWithWinner extends RockPaperScissorsGame {
-  state: State.Finished;
-  players: [Player, Player];
-  moves: [PlayerMove, PlayerMove];
-  result: {
+export type GameFinishedWithWinner = RockPaperScissorsGame<
+  State.Finished,
+  [Player, Player],
+  [PlayerMove, PlayerMove],
+  {
     outcome: Outcome.Winner;
     winner: Player;
-  };
-}
+  }
+>;
 
 export type Game =
   | GameWaitingForPlayerToJoin
