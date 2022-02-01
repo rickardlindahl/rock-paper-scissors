@@ -5,6 +5,7 @@ import { store } from "../../store";
 import { Player, State } from "../../types/game";
 import { HapiRequest } from "../../types/hapi";
 import { HttpMethod } from "../../types/http";
+import { validatePlayer } from "../validation";
 
 export const joinGamePath = "/api/games/{id}/join";
 
@@ -30,5 +31,10 @@ export const joinGameRoute: Hapi.ServerRoute = {
     store.set(game.id, nextState);
 
     return nextState;
+  },
+  options: {
+    validate: {
+      payload: validatePlayer,
+    },
   },
 };

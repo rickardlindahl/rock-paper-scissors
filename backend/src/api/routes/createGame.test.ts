@@ -100,17 +100,37 @@ describe("Create Game endpoint", () => {
     });
 
     describe("Valid JSON with too long name", () => {
-      it(" responds with 400", async () => {
+      it("responds with 400", async () => {
         const res = await server.inject({
           method: HttpMethod.Post,
           url: createGamePath,
           payload: {
-            name: new Array(255 + 1).join("a"),
+            name: new Array(512).join("a"),
+          },
+        });
+
+        expect(res.result).to.equal({
+          statusCode: 400,
+          error: "Bad Request",
+          message: "Invalid request payload input",
+        });
+      });
+    });
+
+    describe("Valid payload", () => {
+      it("responds with 200 and a game id", async () => {
+        const res = await server.inject({
+          method: HttpMethod.Post,
+          url: createGamePath,
+          payload: {
+            name: "Rickard",
           },
         });
 
         expect(res.statusCode).to.equal(200);
-        expect(res.payload).to.be.a.string();
+        expect(res.payload).to.match(
+          /^{"id":"[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}"}/,
+        );
       });
     });
   });

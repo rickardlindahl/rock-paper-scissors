@@ -5,6 +5,7 @@ import { store } from "../../store";
 import { PlayerMove, State } from "../../types/game";
 import { HapiRequest } from "../../types/hapi";
 import { HttpMethod } from "../../types/http";
+import { validatePlayerMove } from "../validation";
 
 export const moveGamePath = "/api/games/{id}/move";
 
@@ -40,5 +41,10 @@ export const moveGameRoute: Hapi.ServerRoute = {
     store.set(game.id, finalGameState);
 
     return responseToolkit.response().code(200);
+  },
+  options: {
+    validate: {
+      payload: validatePlayerMove,
+    },
   },
 };
