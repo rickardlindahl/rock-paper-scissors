@@ -38,11 +38,11 @@ const isPlayerNameConflict = (player1: Player, player2: Player) => player1.name 
 
 export const joinGame = (game: Game, player: Player): GameWaitingForFirstMove => {
   if (!isJoinableState(game)) {
-    throw new GameNotJoinableError("Game is not joinable");
+    throw new GameNotJoinableError("The game has already started or finished");
   }
 
   if (isPlayerNameConflict(game.players[0], player)) {
-    throw new PlayerNameConflictError("A player with that name has already joined the game");
+    throw new PlayerNameConflictError("Player names must be unique");
   }
 
   return {
@@ -101,15 +101,15 @@ const hasPlayerMadeMove = (game: GameWaitingForSecondMove, player: Player) => ga
 
 export const makeMove = (game: Game, playerMove: PlayerMove) => {
   if (!isPossibleToMakeMove(game)) {
-    throw new MoveForbiddenError("Game does not accept any moves at this moment");
+    throw new MoveForbiddenError("The game does not accept any moves at this moment");
   }
 
   if (!isPlayerPartOfTheGame(game, playerMove.player)) {
-    throw new MoveForbiddenError("Player making move is not part of this game");
+    throw new MoveForbiddenError("The player making the move is not part of this game");
   }
 
   if (isWaitingForSecondMove(game) && hasPlayerMadeMove(game, playerMove.player)) {
-    throw new MoveForbiddenError("Player has already made a move");
+    throw new MoveForbiddenError("The player making the move has already made a move");
   }
 
   return isWaitingForFirstMove(game)

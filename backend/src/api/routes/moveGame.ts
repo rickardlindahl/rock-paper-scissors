@@ -1,7 +1,7 @@
 import * as Boom from "@hapi/boom";
 import * as Hapi from "@hapi/hapi";
 import { MoveForbiddenError } from "../../errors/MoveForbiddenError";
-import { makeMove } from "../../game";
+import { getPublicViewModel, makeMove } from "../../game";
 import { store } from "../../store";
 import { PlayerMove } from "../../types/game";
 import { HapiRequest } from "../../types/hapi";
@@ -13,7 +13,7 @@ export const moveGamePath = "/api/games/{id}/move";
 export const moveGameRoute: Hapi.ServerRoute = {
   method: HttpMethod.Post,
   path: moveGamePath,
-  handler: (req: HapiRequest<PlayerMove>, responseToolkit) => {
+  handler: (req: HapiRequest<PlayerMove>) => {
     const playerMove = req.payload;
     const gameId = req.params.id;
 
@@ -28,10 +28,10 @@ export const moveGameRoute: Hapi.ServerRoute = {
 
       store.set(game.id, nextState);
 
-      return responseToolkit.response().code(200);
+      return getPublicViewModel(nextState);
     } catch (e: unknown) {
       if (e instanceof MoveForbiddenError) {
-        throw Boom.forbidden("Unable to make move", e);
+        throw Boom.forbidden(e.message, e);
       }
 
       throw Boom.badImplementation("Failed to make move", e);

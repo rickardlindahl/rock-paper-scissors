@@ -1,6 +1,7 @@
 import { expect } from "@hapi/code";
 import type { Server } from "@hapi/hapi";
 import * as Lab from "@hapi/lab";
+import { getPublicViewModel } from "../../game";
 import { store } from "../../store";
 import {
   GameFinishedWithWinner,
@@ -178,7 +179,7 @@ describe("Join Game endpoint", () => {
       result: null,
     };
 
-    expect(res.result).to.equal(expected);
+    expect(res.result).to.equal(getPublicViewModel(expected));
 
     store.set(id, undefined);
   });

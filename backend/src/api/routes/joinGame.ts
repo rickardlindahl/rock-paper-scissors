@@ -2,7 +2,7 @@ import * as Boom from "@hapi/boom";
 import * as Hapi from "@hapi/hapi";
 import { GameNotJoinableError } from "../../errors/GameNotJoinableError";
 import { PlayerNameConflictError } from "../../errors/PlayerNameConflictError";
-import { joinGame } from "../../game";
+import { getPublicViewModel, joinGame } from "../../game";
 import { store } from "../../store";
 import { Player } from "../../types/game";
 import { HapiRequest } from "../../types/hapi";
@@ -27,14 +27,14 @@ export const joinGameRoute: Hapi.ServerRoute = {
 
       store.set(game.id, nextState);
 
-      return nextState;
+      return getPublicViewModel(nextState);
     } catch (e: unknown) {
       if (e instanceof GameNotJoinableError) {
-        throw Boom.forbidden("The game has already started or finished", e);
+        throw Boom.forbidden(e.message, e);
       }
 
       if (e instanceof PlayerNameConflictError) {
-        throw Boom.conflict("Player names must be unique", e);
+        throw Boom.conflict(e.message, e);
       }
 
       throw Boom.badImplementation("Failed to join game", e);

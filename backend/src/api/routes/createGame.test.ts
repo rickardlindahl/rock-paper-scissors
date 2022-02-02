@@ -31,7 +31,7 @@ describe("Create Game endpoint", () => {
 
     expect(res.statusCode).to.equal(200);
 
-    const { id } = JSON.parse(res.payload) as { id: string };
+    const { id } = res.result as { id: string };
     expect(id).to.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}/);
 
     store.set(id, undefined);

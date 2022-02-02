@@ -25,7 +25,7 @@ describe("Game logic", () => {
   const playerHacker: Player = { name: "Hacker" };
 
   describe("Create game", () => {
-    it("should return a new game", () => {
+    it("should return a new game with the given id and player", () => {
       const expected: GameWaitingForPlayerToJoin = {
         id,
         state: State.WaitingForPlayerToJoin,
@@ -42,7 +42,7 @@ describe("Game logic", () => {
     it("should throw an error when trying to join a new game and player names are equal", () => {
       const game = createGame(id, playerPelle);
 
-      expect(() => joinGame(game, playerPelle)).to.throw("A player with that name has already joined the game");
+      expect(() => joinGame(game, playerPelle)).to.throw("Player names must be unique");
     });
 
     it(`should throw an error when trying to join a game that is in state ${State.WaitingForFirstMove}`, () => {
@@ -54,7 +54,7 @@ describe("Game logic", () => {
         result: null,
       };
 
-      expect(() => joinGame(game, playerLisa)).to.throw("Game is not joinable");
+      expect(() => joinGame(game, playerLisa)).to.throw("The game has already started or finished");
     });
 
     it(`should throw an error when trying to join a game that is in state ${State.WaitingForSecondMove}`, () => {
@@ -65,7 +65,7 @@ describe("Game logic", () => {
 
       expect(game.state).to.equal(State.WaitingForSecondMove);
 
-      expect(() => joinGame(game, playerLisa)).to.throw("Game is not joinable");
+      expect(() => joinGame(game, playerLisa)).to.throw("The game has already started or finished");
     });
 
     it(`should throw an error when trying to join a game that is in state ${State.Finished}`, () => {
@@ -83,7 +83,7 @@ describe("Game logic", () => {
         },
       };
 
-      expect(() => joinGame(game, playerLisa)).to.throw("Game is not joinable");
+      expect(() => joinGame(game, playerLisa)).to.throw("The game has already started or finished");
     });
 
     it(`should return a game with state ${State.WaitingForFirstMove} when successfully joining a new game`, () => {
@@ -106,7 +106,7 @@ describe("Game logic", () => {
       const game = createGame(id, playerPelle);
 
       expect(() => makeMove(game, { player: playerPelle, move: Move.Paper })).to.throw(
-        "Game does not accept any moves at this moment",
+        "The game does not accept any moves at this moment",
       );
     });
 
@@ -126,7 +126,7 @@ describe("Game logic", () => {
       };
 
       expect(() => makeMove(game, { player: playerPelle, move: Move.Paper })).to.throw(
-        "Game does not accept any moves at this moment",
+        "The game does not accept any moves at this moment",
       );
     });
 
@@ -140,7 +140,7 @@ describe("Game logic", () => {
       };
 
       expect(() => makeMove(game, { player: playerHacker, move: Move.Paper })).to.throw(
-        "Player making move is not part of this game",
+        "The player making the move is not part of this game",
       );
     });
 
@@ -153,7 +153,9 @@ describe("Game logic", () => {
         result: null,
       };
 
-      expect(() => makeMove(game, { player: playerPelle, move: Move.Rock })).to.throw("Player has already made a move");
+      expect(() => makeMove(game, { player: playerPelle, move: Move.Rock })).to.throw(
+        "The player making the move has already made a move",
+      );
     });
 
     it(`should return a game with state ${State.WaitingForSecondMove} when the player who created the game makes the first move`, () => {

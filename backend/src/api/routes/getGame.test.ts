@@ -70,7 +70,7 @@ describe("Get Game endpoint", () => {
     });
 
     expect(res.statusCode).to.equal(200);
-    expect(JSON.parse(res.payload)).to.equal(getPublicViewModel(game));
+    expect(res.result).to.equal(getPublicViewModel(game));
 
     store.set(id, undefined);
   });
@@ -92,7 +92,7 @@ describe("Get Game endpoint", () => {
     });
 
     expect(res.statusCode).to.equal(200);
-    expect(JSON.parse(res.payload)).to.equal(getPublicViewModel(game));
+    expect(res.result).to.equal(getPublicViewModel(game));
 
     store.set(id, undefined);
   });
@@ -114,7 +114,7 @@ describe("Get Game endpoint", () => {
     });
 
     expect(res.statusCode).to.equal(200);
-    expect(JSON.parse(res.payload)).to.equal(getPublicViewModel(game));
+    expect(res.result).to.equal(getPublicViewModel(game));
 
     store.set(id, undefined);
   });
@@ -139,7 +139,7 @@ describe("Get Game endpoint", () => {
     });
 
     expect(res.statusCode).to.equal(200);
-    expect(JSON.parse(res.payload)).to.equal(getPublicViewModel(game));
+    expect(res.result).to.equal(getPublicViewModel(game));
 
     store.set(id, undefined);
   });
@@ -164,7 +164,7 @@ describe("Get Game endpoint", () => {
     });
 
     expect(res.statusCode).to.equal(200);
-    expect(JSON.parse(res.payload)).to.equal(getPublicViewModel(game));
+    expect(res.result).to.equal(getPublicViewModel(game));
 
     store.set(id, undefined);
   });
