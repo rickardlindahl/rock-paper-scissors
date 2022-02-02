@@ -90,3 +90,11 @@ export const secondMove = (
     },
   };
 };
+
+export const getPublicViewModel = (game: Game) => {
+  if (game.state === State.WaitingForSecondMove) {
+    return { ...game, moves: undefined };
+  }
+
+  return game;
+};

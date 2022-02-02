@@ -1,7 +1,7 @@
 import * as Boom from "@hapi/boom";
 import * as Hapi from "@hapi/hapi";
+import { getPublicViewModel } from "../../game";
 import { store } from "../../store";
-import { State } from "../../types/game";
 import { HapiRequest } from "../../types/hapi";
 import { HttpMethod } from "../../types/http";
 
@@ -19,10 +19,6 @@ export const getGameRoute: Hapi.ServerRoute = {
       return Boom.notFound("Game does not exist");
     }
 
-    if (game.state === State.WaitingForSecondMove) {
-      return { ...game, moves: undefined };
-    }
-
-    return game;
+    return getPublicViewModel(game);
   },
 };
