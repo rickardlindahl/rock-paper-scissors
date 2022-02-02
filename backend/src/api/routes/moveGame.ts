@@ -1,8 +1,9 @@
 import * as Boom from "@hapi/boom";
 import * as Hapi from "@hapi/hapi";
-import { firstMove, secondMove } from "../../game";
+import { MoveForbiddenError } from "../../errors/MoveForbiddenError";
+import { makeMove } from "../../game";
 import { store } from "../../store";
-import { PlayerMove, State } from "../../types/game";
+import { PlayerMove } from "../../types/game";
 import { HapiRequest } from "../../types/hapi";
 import { HttpMethod } from "../../types/http";
 import { validatePlayerMove } from "../validation";
@@ -22,25 +23,19 @@ export const moveGameRoute: Hapi.ServerRoute = {
       return Boom.notFound("Game does not exist");
     }
 
-    if (game.state === State.Finished) {
-      return Boom.forbidden("Move not allowed! Game is already finished.");
-    }
+    try {
+      const nextState = makeMove(game, playerMove);
 
-    if (game.state === State.WaitingForPlayerToJoin) {
-      return Boom.forbidden("Move not allowed! Waiting for opponent to join.");
-    }
-
-    if (game.state === State.WaitingForFirstMove) {
-      store.set(game.id, firstMove(game, playerMove));
+      store.set(game.id, nextState);
 
       return responseToolkit.response().code(200);
+    } catch (e: unknown) {
+      if (e instanceof MoveForbiddenError) {
+        throw Boom.forbidden("Unable to make move", e);
+      }
+
+      throw Boom.badImplementation("Failed to make move", e);
     }
-
-    const finalGameState = secondMove(game, playerMove);
-
-    store.set(game.id, finalGameState);
-
-    return responseToolkit.response().code(200);
   },
   options: {
     validate: {

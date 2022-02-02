@@ -39,7 +39,7 @@ export const joinGameRoute: Hapi.ServerRoute = {
         throw Boom.conflict("Player name conflict", e);
       }
 
-      throw Boom.badImplementation("Unable to join game", e);
+      throw Boom.badImplementation("Failed to join game", e);
     }
   },
   options: {

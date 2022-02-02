@@ -1,4 +1,5 @@
 import { GameNotJoinableError } from "./errors/GameNotJoinableError";
+import { MoveForbiddenError } from "./errors/MoveForbiddenError";
 import { PlayerNameConflictError } from "./errors/PlayerNameConflictError";
 import {
   Game,
@@ -32,7 +33,7 @@ export const createGame = (id: string, player: Player): GameWaitingForPlayerToJo
   result: undefined,
 });
 
-const isJoinableState = (g: Game): g is GameWaitingForPlayerToJoin => g.state === State.WaitingForPlayerToJoin;
+const isJoinableState = (game: Game): game is GameWaitingForPlayerToJoin => game.state === State.WaitingForPlayerToJoin;
 const isPlayerNameConflict = (player1: Player, player2: Player) => player1.name === player2.name;
 
 export const joinGame = (game: Game, player: Player): GameWaitingForFirstMove => {
@@ -51,13 +52,13 @@ export const joinGame = (game: Game, player: Player): GameWaitingForFirstMove =>
   };
 };
 
-export const firstMove = (game: GameWaitingForFirstMove, playerMove: PlayerMove): GameWaitingForSecondMove => ({
+const firstMove = (game: GameWaitingForFirstMove, playerMove: PlayerMove): GameWaitingForSecondMove => ({
   ...game,
   state: State.WaitingForSecondMove,
   moves: [playerMove],
 });
 
-export const secondMove = (
+const secondMove = (
   game: GameWaitingForSecondMove,
   playerMove: PlayerMove,
 ): GameFinishedAsDraw | GameFinishedWithWinner => {
@@ -89,6 +90,32 @@ export const secondMove = (
       winner: isMove1Winner(move1.move, playerMove.move) ? move1.player : playerMove.player,
     },
   };
+};
+
+const isWaitingForFirstMove = (game: Game): game is GameWaitingForFirstMove => game.state === State.WaitingForFirstMove;
+const isWaitingForSecondMove = (game: Game): game is GameWaitingForSecondMove =>
+  game.state === State.WaitingForSecondMove;
+const isPossibleToMakeMove = (game: Game) => isWaitingForFirstMove(game) || isWaitingForSecondMove(game);
+const isPlayerPartOfTheGame = (game: Game, player: Player) => !!game.players.find(({ name }) => name === player.name);
+const hasPlayerMadeMove = (game: GameWaitingForFirstMove | GameWaitingForSecondMove, player: Player) =>
+  !!game.moves.find(({ name }) => name === player.name);
+
+export const makeMove = (game: Game, playerMove: PlayerMove) => {
+  if (!isPossibleToMakeMove(game)) {
+    throw new MoveForbiddenError("Game does not accept any moves at this moment");
+  }
+
+  if (!isPlayerPartOfTheGame(game, playerMove.player)) {
+    throw new MoveForbiddenError("Player making move is not part of this game");
+  }
+
+  if (hasPlayerMadeMove) {
+    throw new MoveForbiddenError("Player has already made a move");
+  }
+
+  return isWaitingForFirstMove(game)
+    ? firstMove(game, playerMove)
+    : secondMove(game as GameWaitingForSecondMove, playerMove);
 };
 
 export const getPublicViewModel = (game: Game) => {
