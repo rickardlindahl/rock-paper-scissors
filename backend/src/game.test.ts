@@ -1,6 +1,6 @@
 import { expect } from "@hapi/code";
 import * as Lab from "@hapi/lab";
-import { createGame, joinGame, makeMove } from "./game";
+import { createGame, getPublicViewModel, joinGame, makeMove } from "./game";
 import {
   GameFinishedAsDraw,
   GameFinishedWithWinner,
@@ -428,6 +428,83 @@ describe("Game logic", () => {
       };
 
       expect(makeMove(makeMove(game, playerPelleMove), playerLisaMove)).to.equal(expected);
+    });
+  });
+
+  describe("getPublicViewModel", () => {
+    it(`should return all properties when state is ${State.WaitingForPlayerToJoin}`, () => {
+      const game: GameWaitingForPlayerToJoin = {
+        id,
+        state: State.WaitingForPlayerToJoin,
+        players: [playerPelle],
+        moves: [],
+        result: undefined,
+      };
+
+      expect(getPublicViewModel(game)).to.equal(game);
+    });
+
+    it(`should return all properties when state is ${State.WaitingForFirstMove}`, () => {
+      const game: GameWaitingForFirstMove = {
+        id,
+        state: State.WaitingForFirstMove,
+        players: [playerPelle, playerLisa],
+        moves: [],
+        result: undefined,
+      };
+
+      expect(getPublicViewModel(game)).to.equal(game);
+    });
+
+    it(`should return all properties except the moves when state is ${State.WaitingForSecondMove}`, () => {
+      const game: GameWaitingForSecondMove = {
+        id,
+        state: State.WaitingForSecondMove,
+        players: [playerPelle, playerLisa],
+        moves: [{ player: playerPelle, move: Move.Rock }],
+        result: undefined,
+      };
+
+      expect(getPublicViewModel(game)).to.equal({
+        ...game,
+        moves: undefined,
+      });
+    });
+
+    it(`should return all properties when state is ${State.Finished} and outcome is ${Outcome.Draw}`, () => {
+      const game: GameFinishedAsDraw = {
+        id,
+        state: State.Finished,
+        players: [playerPelle, playerLisa],
+        moves: [
+          { player: playerPelle, move: Move.Rock },
+          { player: playerLisa, move: Move.Rock },
+        ],
+        result: {
+          outcome: Outcome.Draw,
+          winner: undefined,
+        },
+      };
+
+      expect(getPublicViewModel(game)).to.equal(game);
+    });
+
+    it(`should return all properties when state is ${State.Finished} and outcome is ${Outcome.Winner}`, () => {
+      const game: GameFinishedWithWinner = {
+        id,
+        state: State.Finished,
+        players: [playerPelle, playerLisa],
+        moves: [
+          { player: playerPelle, move: Move.Rock },
+          { player: playerLisa, move: Move.Paper },
+        ],
+        result: {
+          outcome: Outcome.Winner,
+          winner: playerLisa,
+        },
+      };
+
+      expect(getPublicViewModel(game)).to.equal(game);
     });
   });
 });
