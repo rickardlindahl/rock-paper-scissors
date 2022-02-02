@@ -13,7 +13,7 @@ Before running the server of developing make sure to download the dependencies.
 npm ci
 ```
 
-## Starting the server
+# Starting the server
 
 Start the server by running:
 
@@ -21,13 +21,13 @@ Start the server by running:
 npm run start
 ```
 
-This will run the typescript compiler and output to `dist` before starting the server with `node`.
+This will run the typescript compiler and output to the `dist`-folder before starting the server with `node`.
 
-## Playing the game
+# Playing the game
 
-Make sure the server is up and running.
+Prerequisites: Make sure the server is up and running.
 
-**Step 1** - Create a game
+## Step 1 - Create a game
 
 ```sh
 curl -X POST http://localhost:3000/api/games \
@@ -37,7 +37,7 @@ curl -X POST http://localhost:3000/api/games \
 
 The server will respond with a game id you can send to your opponent.
 
-**Step 2** - Join the game
+## Step 2 - Join the game
 
 Limits: The name of the opponent must be unique - it can't be the same as the player who created the game.
 
@@ -51,7 +51,7 @@ curl -X POST http://localhost:3000/api/games/{id}/join \
 
 The server will respond with the current state of the game.
 
-**Step 3** - Make a move:
+## Step 3 - Make a move:
 
 Valid moves: `"ROCK"`, `"PAPER"`, `"SCISSORS"`
 
@@ -67,7 +67,7 @@ curl -X POST http://localhost:3000/api/games/{id}/move \
 
 The server will respond with the current state of the game, except the move just made.
 
-**Step 4** - Make a (second) move:
+## Step 4 - Make a (second) move:
 
 Valid moves: `"ROCK"`, `"PAPER"`, `"SCISSORS"`
 
@@ -81,7 +81,9 @@ curl -X POST http://localhost:3000/api/games/{id}/move \
 
 The server will respond with the final state of the game.
 
-**Step 5** - Get the state of the game to see the result (optional for the player making the second move)
+## Step 5 - Get the state of the game
+
+Find out the state of the game (optional for the player making the second move)
 
 ```sh
 curl -X GET http://localhost:3000/api/games/{id}
@@ -103,11 +105,7 @@ The output will include the following to determine who won:
 
 Have fun!
 
-### Limitations
-
-No user validation is in place - you can make a move as any player as long as they are part of the game.
-
-## Developing
+# Developing
 
 Start the development server by running:
 
@@ -133,7 +131,7 @@ Or in watch mode:
 npm run watch:test
 ```
 
-## Example game
+# Example game
 
 1 - Pelle creates a game
 
@@ -216,3 +214,7 @@ curl -X GET http://localhost:3000/api/games/7a285d3e-f892-4964-9da5-478356e9cc40
   ]
 }
 ```
+
+# Limitations
+
+No user validation is in place - you can make a move as any player as long as they are part of the game.
