@@ -5,11 +5,9 @@ import { store } from "../../store";
 import { HapiRequest } from "../../types/hapi";
 import { HttpMethod } from "../../types/http";
 
-export const getGamePath = "/api/games/{id}";
-
 export const getGameRoute: Hapi.ServerRoute = {
   method: HttpMethod.Get,
-  path: getGamePath,
+  path: "/api/games/{id}",
   handler: (req: HapiRequest<undefined, { "id": string }>) => {
     const gameId = req.params.id;
 
