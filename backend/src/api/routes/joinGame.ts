@@ -26,6 +26,10 @@ export const joinGameRoute: Hapi.ServerRoute = {
       return Boom.forbidden("Game is not joinable");
     }
 
+    if (player.name === game.players[0].name) {
+      return Boom.conflict("A player with that name is already in the game. Please choose another name.");
+    }
+
     const nextState = joinGame(game, player);
 
     store.set(game.id, nextState);
