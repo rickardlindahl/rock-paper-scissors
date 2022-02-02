@@ -1,6 +1,7 @@
 import { expect } from "@hapi/code";
 import type { Server } from "@hapi/hapi";
 import * as Lab from "@hapi/lab";
+import { store } from "../../store";
 import { HttpMethod } from "../../types/http";
 import { init } from "../server";
 
@@ -19,106 +20,95 @@ describe("Create Game endpoint", () => {
     await server.stop();
   });
 
-  describe("POSTing without a payload", () => {
-    it("should respond with 400", async () => {
-      const res = await server.inject({
-        method: HttpMethod.Post,
-        url: "/api/games",
-        payload: undefined,
-      });
+  it("should respond with 400 when posting without a payload", async () => {
+    const res = await server.inject({
+      method: HttpMethod.Post,
+      url: "/api/games",
+    });
 
-      expect(res.result).to.equal({
-        statusCode: 400,
-        error: "Bad Request",
-        message: "Invalid request payload input",
-      });
+    expect(res.result).to.equal({
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Invalid request payload input",
     });
   });
 
-  describe("POSTing with a non-JSON payload", () => {
-    it("should respond with 400", async () => {
-      const res = await server.inject({
-        method: HttpMethod.Post,
-        url: "/api/games",
-        payload: "Not JSON",
-      });
+  it("should respond with 400 when posting with invalid JSON payload", async () => {
+    const res = await server.inject({
+      method: HttpMethod.Post,
+      url: "/api/games",
+      payload: "Not JSON",
+    });
 
-      expect(res.result).to.equal({
-        statusCode: 400,
-        error: "Bad Request",
-        message: "Invalid request payload JSON format",
-      });
+    expect(res.result).to.equal({
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Invalid request payload JSON format",
     });
   });
 
-  describe("POSTing with valid JSON without a name property", () => {
-    it("should respond with 400", async () => {
-      const res = await server.inject({
-        method: HttpMethod.Post,
-        url: "/api/games",
-        payload: {
-          foo: "bar",
-        },
-      });
+  it("should respond with 400 when posting with valid JSON without a name property", async () => {
+    const res = await server.inject({
+      method: HttpMethod.Post,
+      url: "/api/games",
+      payload: {
+        foo: "bar",
+      },
+    });
 
-      expect(res.result).to.equal({
-        statusCode: 400,
-        error: "Bad Request",
-        message: "Invalid request payload input",
-      });
+    expect(res.result).to.equal({
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Invalid request payload input",
     });
   });
 
-  describe("Valid JSON with an empty name", () => {
-    it("should respond with 400", async () => {
-      const res = await server.inject({
-        method: HttpMethod.Post,
-        url: "/api/games",
-        payload: {
-          name: "",
-        },
-      });
+  it("should respond with 400 when posting with valid JSON with an empty name", async () => {
+    const res = await server.inject({
+      method: HttpMethod.Post,
+      url: "/api/games",
+      payload: {
+        name: "",
+      },
+    });
 
-      expect(res.result).to.equal({
-        statusCode: 400,
-        error: "Bad Request",
-        message: "Invalid request payload input",
-      });
+    expect(res.result).to.equal({
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Invalid request payload input",
     });
   });
 
-  describe("Valid JSON with too long name", () => {
-    it("should respond with 400", async () => {
-      const res = await server.inject({
-        method: HttpMethod.Post,
-        url: "/api/games",
-        payload: {
-          name: new Array(512).join("a"),
-        },
-      });
+  it("should respond with 400 when posting with valid JSON with too long name", async () => {
+    const res = await server.inject({
+      method: HttpMethod.Post,
+      url: "/api/games",
+      payload: {
+        name: new Array(512).join("a"),
+      },
+    });
 
-      expect(res.result).to.equal({
-        statusCode: 400,
-        error: "Bad Request",
-        message: "Invalid request payload input",
-      });
+    expect(res.result).to.equal({
+      statusCode: 400,
+      error: "Bad Request",
+      message: "Invalid request payload input",
     });
   });
 
-  describe("Valid payload", () => {
-    it("should respond with 200 and a game id", async () => {
-      const res = await server.inject({
-        method: HttpMethod.Post,
-        url: "/api/games",
-        payload: {
-          name: "Pelle",
-        },
-      });
-
-      expect(res.statusCode).to.equal(200);
-
-      const response = JSON.parse(res.payload);
-      expect(response.id).to.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}/);
+  it("should respond with 200 and a game id when posting with a valid payload", async () => {
+    const res = await server.inject({
+      method: HttpMethod.Post,
+      url: "/api/games",
+      payload: {
+        name: "Pelle",
+      },
     });
+
+    expect(res.statusCode).to.equal(200);
+
+    const { id } = JSON.parse(res.payload) as { id: string };
+    expect(id).to.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}/);
+
+    store.set(id, undefined);
   });
 });
