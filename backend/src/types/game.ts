@@ -8,8 +8,7 @@ export enum Move {
   Scissors = "SCISSORS",
 }
 
-export interface PlayerMove {
-  player: Player;
+export interface PlayerMove extends Player {
   move: Move;
 }
 

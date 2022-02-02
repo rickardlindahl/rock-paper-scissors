@@ -27,11 +27,11 @@ describe("Get Game endpoint", () => {
   const playerPelle: Player = { name: "Pelle" };
   const playerLisa: Player = { name: "Lisa" };
   const playerMovePelle: PlayerMove = {
-    player: playerPelle,
+    ...playerPelle,
     move: Move.Rock,
   };
   const playerMoveLisa: PlayerMove = {
-    player: playerLisa,
+    ...playerLisa,
     move: Move.Paper,
   };
 

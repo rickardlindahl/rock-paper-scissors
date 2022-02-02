@@ -21,6 +21,8 @@ const winMap: { [key in Move]: Move } = {
   [Move.Scissors]: Move.Paper,
 };
 
+const convertPlayerMoveToPlayer = ({ name }: PlayerMove): Player => ({ name });
+
 const isMove1Winner = (move1: Move, move2: Move): boolean => winMap[move1] === move2;
 
 const isDraw = (move1: Move, move2: Move): boolean => move1 === move2;
@@ -87,7 +89,9 @@ const secondMove = (
     moves,
     result: {
       outcome: Outcome.Winner,
-      winner: isMove1Winner(move1.move, playerMove.move) ? move1.player : playerMove.player,
+      winner: isMove1Winner(move1.move, playerMove.move)
+        ? convertPlayerMoveToPlayer(move1)
+        : convertPlayerMoveToPlayer(playerMove),
     },
   };
 };
@@ -97,18 +101,18 @@ const isWaitingForSecondMove = (game: Game): game is GameWaitingForSecondMove =>
   game.state === State.WaitingForSecondMove;
 const isPossibleToMakeMove = (game: Game) => isWaitingForFirstMove(game) || isWaitingForSecondMove(game);
 const isPlayerPartOfTheGame = (game: Game, player: Player) => !!game.players.find(({ name }) => name === player.name);
-const hasPlayerMadeMove = (game: GameWaitingForSecondMove, player: Player) => game.moves[0].player.name === player.name;
+const hasPlayerMadeMove = (game: GameWaitingForSecondMove, player: Player) => game.moves[0].name === player.name;
 
 export const makeMove = (game: Game, playerMove: PlayerMove) => {
   if (!isPossibleToMakeMove(game)) {
     throw new MoveForbiddenError("The game does not accept any moves at this moment");
   }
 
-  if (!isPlayerPartOfTheGame(game, playerMove.player)) {
+  if (!isPlayerPartOfTheGame(game, { name: playerMove.name })) {
     throw new MoveForbiddenError("The player making the move is not part of this game");
   }
 
-  if (isWaitingForSecondMove(game) && hasPlayerMadeMove(game, playerMove.player)) {
+  if (isWaitingForSecondMove(game) && hasPlayerMadeMove(game, { name: playerMove.name })) {
     throw new MoveForbiddenError("The player making the move has already made a move");
   }
 

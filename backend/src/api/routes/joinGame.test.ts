@@ -25,8 +25,8 @@ describe("Join Game endpoint", () => {
   const id = "123";
   const playerPelle: Player = { name: "Pelle" };
   const playerLisa: Player = { name: "Lisa" };
-  const playerMovePelle: PlayerMove = { player: playerPelle, move: Move.Rock };
-  const playerMoveLisa: PlayerMove = { player: playerLisa, move: Move.Paper };
+  const playerMovePelle: PlayerMove = { ...playerPelle, move: Move.Rock };
+  const playerMoveLisa: PlayerMove = { ...playerLisa, move: Move.Paper };
   let server: Server;
 
   beforeEach(async () => {

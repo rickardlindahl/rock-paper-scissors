@@ -59,7 +59,7 @@ describe("Game logic", () => {
 
     it(`should throw an error when trying to join a game that is in state ${State.WaitingForSecondMove}`, () => {
       const game = makeMove(joinGame(createGame(id, playerPelle), playerLisa), {
-        player: playerPelle,
+        ...playerPelle,
         move: Move.Rock,
       });
 
@@ -74,8 +74,8 @@ describe("Game logic", () => {
         state: State.Finished,
         players: [playerPelle, playerLisa],
         moves: [
-          { player: playerPelle, move: Move.Paper },
-          { player: playerLisa, move: Move.Paper },
+          { ...playerPelle, move: Move.Paper },
+          { ...playerLisa, move: Move.Paper },
         ],
         result: {
           outcome: Outcome.Draw,
@@ -105,7 +105,7 @@ describe("Game logic", () => {
     it(`should throw an error when trying to make a move on a game with state ${State.WaitingForPlayerToJoin}`, () => {
       const game = createGame(id, playerPelle);
 
-      expect(() => makeMove(game, { player: playerPelle, move: Move.Paper })).to.throw(
+      expect(() => makeMove(game, { ...playerPelle, move: Move.Paper })).to.throw(
         "The game does not accept any moves at this moment",
       );
     });
@@ -116,8 +116,8 @@ describe("Game logic", () => {
         state: State.Finished,
         players: [playerPelle, playerLisa],
         moves: [
-          { player: playerPelle, move: Move.Paper },
-          { player: playerLisa, move: Move.Paper },
+          { ...playerPelle, move: Move.Paper },
+          { ...playerLisa, move: Move.Paper },
         ],
         result: {
           outcome: Outcome.Draw,
@@ -125,7 +125,7 @@ describe("Game logic", () => {
         },
       };
 
-      expect(() => makeMove(game, { player: playerPelle, move: Move.Paper })).to.throw(
+      expect(() => makeMove(game, { ...playerPelle, move: Move.Paper })).to.throw(
         "The game does not accept any moves at this moment",
       );
     });
@@ -139,7 +139,7 @@ describe("Game logic", () => {
         result: null,
       };
 
-      expect(() => makeMove(game, { player: playerHacker, move: Move.Paper })).to.throw(
+      expect(() => makeMove(game, { ...playerHacker, move: Move.Paper })).to.throw(
         "The player making the move is not part of this game",
       );
     });
@@ -149,11 +149,11 @@ describe("Game logic", () => {
         id,
         state: State.WaitingForSecondMove,
         players: [playerPelle, playerLisa],
-        moves: [{ player: playerPelle, move: Move.Paper }],
+        moves: [{ ...playerPelle, move: Move.Paper }],
         result: null,
       };
 
-      expect(() => makeMove(game, { player: playerPelle, move: Move.Rock })).to.throw(
+      expect(() => makeMove(game, { ...playerPelle, move: Move.Rock })).to.throw(
         "The player making the move has already made a move",
       );
     });
@@ -167,7 +167,7 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerMove: PlayerMove = { player: playerPelle, move: Move.Rock };
+      const playerMove: PlayerMove = { ...playerPelle, move: Move.Rock };
 
       const expected: GameWaitingForSecondMove = {
         ...game,
@@ -187,7 +187,7 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerMove: PlayerMove = { player: playerLisa, move: Move.Rock };
+      const playerMove: PlayerMove = { ...playerLisa, move: Move.Rock };
 
       const expected: GameWaitingForSecondMove = {
         ...game,
@@ -207,8 +207,8 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Rock };
-      const playerLisaMove: PlayerMove = { player: playerLisa, move: Move.Rock };
+      const playerPelleMove: PlayerMove = { ...playerPelle, move: Move.Rock };
+      const playerLisaMove: PlayerMove = { ...playerLisa, move: Move.Rock };
 
       const expected: GameFinishedAsDraw = {
         id,
@@ -233,8 +233,8 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Paper };
-      const playerLisaMove: PlayerMove = { player: playerLisa, move: Move.Paper };
+      const playerPelleMove: PlayerMove = { ...playerPelle, move: Move.Paper };
+      const playerLisaMove: PlayerMove = { ...playerLisa, move: Move.Paper };
 
       const expected: GameFinishedAsDraw = {
         id,
@@ -259,8 +259,8 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Scissors };
-      const playerLisaMove: PlayerMove = { player: playerLisa, move: Move.Scissors };
+      const playerPelleMove: PlayerMove = { ...playerPelle, move: Move.Scissors };
+      const playerLisaMove: PlayerMove = { ...playerLisa, move: Move.Scissors };
 
       const expected: GameFinishedAsDraw = {
         id,
@@ -285,8 +285,8 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Rock };
-      const playerLisaMove: PlayerMove = { player: playerLisa, move: Move.Scissors };
+      const playerPelleMove: PlayerMove = { ...playerPelle, move: Move.Rock };
+      const playerLisaMove: PlayerMove = { ...playerLisa, move: Move.Scissors };
 
       const expected: GameFinishedWithWinner = {
         id,
@@ -311,8 +311,8 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Rock };
-      const playerLisaMove: PlayerMove = { player: playerLisa, move: Move.Paper };
+      const playerPelleMove: PlayerMove = { ...playerPelle, move: Move.Rock };
+      const playerLisaMove: PlayerMove = { ...playerLisa, move: Move.Paper };
 
       const expected: GameFinishedWithWinner = {
         id,
@@ -337,8 +337,8 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Paper };
-      const playerLisaMove: PlayerMove = { player: playerLisa, move: Move.Rock };
+      const playerPelleMove: PlayerMove = { ...playerPelle, move: Move.Paper };
+      const playerLisaMove: PlayerMove = { ...playerLisa, move: Move.Rock };
 
       const expected: GameFinishedWithWinner = {
         id,
@@ -363,8 +363,8 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Paper };
-      const playerLisaMove: PlayerMove = { player: playerLisa, move: Move.Scissors };
+      const playerPelleMove: PlayerMove = { ...playerPelle, move: Move.Paper };
+      const playerLisaMove: PlayerMove = { ...playerLisa, move: Move.Scissors };
 
       const expected: GameFinishedWithWinner = {
         id,
@@ -389,8 +389,8 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Scissors };
-      const playerLisaMove: PlayerMove = { player: playerLisa, move: Move.Rock };
+      const playerPelleMove: PlayerMove = { ...playerPelle, move: Move.Scissors };
+      const playerLisaMove: PlayerMove = { ...playerLisa, move: Move.Rock };
 
       const expected: GameFinishedWithWinner = {
         id,
@@ -415,8 +415,8 @@ describe("Game logic", () => {
         result: null,
       };
 
-      const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Scissors };
-      const playerLisaMove: PlayerMove = { player: playerLisa, move: Move.Paper };
+      const playerPelleMove: PlayerMove = { ...playerPelle, move: Move.Scissors };
+      const playerLisaMove: PlayerMove = { ...playerLisa, move: Move.Paper };
 
       const expected: GameFinishedWithWinner = {
         id,
@@ -463,7 +463,7 @@ describe("Game logic", () => {
         id,
         state: State.WaitingForSecondMove,
         players: [playerPelle, playerLisa],
-        moves: [{ player: playerPelle, move: Move.Rock }],
+        moves: [{ ...playerPelle, move: Move.Rock }],
         result: null,
       };
 
@@ -478,8 +478,8 @@ describe("Game logic", () => {
         state: State.Finished,
         players: [playerPelle, playerLisa],
         moves: [
-          { player: playerPelle, move: Move.Rock },
-          { player: playerLisa, move: Move.Rock },
+          { ...playerPelle, move: Move.Rock },
+          { ...playerLisa, move: Move.Rock },
         ],
         result: {
           outcome: Outcome.Draw,
@@ -496,8 +496,8 @@ describe("Game logic", () => {
         state: State.Finished,
         players: [playerPelle, playerLisa],
         moves: [
-          { player: playerPelle, move: Move.Rock },
-          { player: playerLisa, move: Move.Paper },
+          { ...playerPelle, move: Move.Rock },
+          { ...playerLisa, move: Move.Paper },
         ],
         result: {
           outcome: Outcome.Winner,

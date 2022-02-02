@@ -9,8 +9,6 @@ export const validatePlayer = Joi.object<Player>({
 });
 
 export const validatePlayerMove = Joi.object<PlayerMove>({
-  player: {
-    name: playerNameSchema,
-  },
+  name: playerNameSchema,
   move: moveSchema,
 });

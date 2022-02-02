@@ -26,9 +26,9 @@ describe("Move Game endpoint", () => {
   const playerPelle: Player = { name: "Pelle" };
   const playerLisa: Player = { name: "Lisa" };
   const playerHacker: Player = { name: "Hacker" };
-  const playerMovePelle: PlayerMove = { player: playerPelle, move: Move.Rock };
-  const playerMoveLisa: PlayerMove = { player: playerLisa, move: Move.Paper };
-  const playerMoveHacker: PlayerMove = { player: playerHacker, move: Move.Scissors };
+  const playerMovePelle: PlayerMove = { ...playerPelle, move: Move.Rock };
+  const playerMoveLisa: PlayerMove = { ...playerLisa, move: Move.Paper };
+  const playerMoveHacker: PlayerMove = { ...playerHacker, move: Move.Scissors };
   let server: Server;
 
   beforeEach(async () => {
