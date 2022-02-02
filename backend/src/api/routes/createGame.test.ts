@@ -3,7 +3,6 @@ import type { Server } from "@hapi/hapi";
 import * as Lab from "@hapi/lab";
 import { HttpMethod } from "../../types/http";
 import { init } from "../server";
-import { createGamePath } from "./createGame";
 
 const lab = Lab.script();
 const { beforeEach, afterEach, describe, it } = lab;
@@ -24,7 +23,7 @@ describe("Create Game endpoint", () => {
     it("should respond with 400", async () => {
       const res = await server.inject({
         method: HttpMethod.Post,
-        url: createGamePath,
+        url: "/api/games",
         payload: undefined,
       });
 
@@ -40,7 +39,7 @@ describe("Create Game endpoint", () => {
     it("should respond with 400", async () => {
       const res = await server.inject({
         method: HttpMethod.Post,
-        url: createGamePath,
+        url: "/api/games",
         payload: "Not JSON",
       });
 
@@ -56,7 +55,7 @@ describe("Create Game endpoint", () => {
     it("should respond with 400", async () => {
       const res = await server.inject({
         method: HttpMethod.Post,
-        url: createGamePath,
+        url: "/api/games",
         payload: {
           foo: "bar",
         },
@@ -74,7 +73,7 @@ describe("Create Game endpoint", () => {
     it("should respond with 400", async () => {
       const res = await server.inject({
         method: HttpMethod.Post,
-        url: createGamePath,
+        url: "/api/games",
         payload: {
           name: "",
         },
@@ -92,7 +91,7 @@ describe("Create Game endpoint", () => {
     it("should respond with 400", async () => {
       const res = await server.inject({
         method: HttpMethod.Post,
-        url: createGamePath,
+        url: "/api/games",
         payload: {
           name: new Array(512).join("a"),
         },
@@ -110,7 +109,7 @@ describe("Create Game endpoint", () => {
     it("should respond with 200 and a game id", async () => {
       const res = await server.inject({
         method: HttpMethod.Post,
-        url: createGamePath,
+        url: "/api/games",
         payload: {
           name: "Pelle",
         },

@@ -7,11 +7,9 @@ import { HapiRequest } from "../../types/hapi";
 import { HttpMethod } from "../../types/http";
 import { validatePlayer } from "../validation";
 
-export const createGamePath = "/api/games";
-
 export const createGameRoute: Hapi.ServerRoute = {
   method: HttpMethod.Post,
-  path: createGamePath,
+  path: "/api/games",
   handler: (req: HapiRequest<Player>) => {
     const player = req.payload;
 
