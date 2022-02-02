@@ -95,8 +95,8 @@ The output will include the following to determine who won:
 {
    ...
    result: {
-      outcome: "DRAW" | "WINNER",
-      winner: outcome == "WINNER" ? player : null
+      outcome: "WINNER" | "DRAW",
+      winner: Player | null
    }
 }
 ```
@@ -131,4 +131,88 @@ Or in watch mode:
 
 ```shell
 npm run watch:test
+```
+
+## Example game
+
+1 - Pelle creates a game
+
+```sh
+curl -X POST http://localhost:3000/api/games \
+     -H 'Content-Type: application/json' \
+     -d '{ "name": "Pelle" }'
+
+# Server response
+{ "id": "7a285d3e-f892-4964-9da5-478356e9cc40" }
+```
+
+2 - Lisa joins the game
+
+```sh
+curl -X POST http://localhost:3000/api/games/7a285d3e-f892-4964-9da5-478356e9cc40/join \
+     -H 'Content-Type: application/json' \
+     -d '{ "name": "Lisa" }'
+
+# Server response
+{
+  "id": "7a285d3e-f892-4964-9da5-478356e9cc40",
+  "state": "WAITING_FOR_FIRST_MOVE",
+  "players": [{ "name": "Pelle" }, { "name": "Lisa" }],
+  "moves": [],
+  "result": null
+}
+```
+
+3 - Pelle makes a move - `"ROCK"`
+
+```sh
+curl -X POST http://localhost:3000/api/games/7a285d3e-f892-4964-9da5-478356e9cc40/move \
+     -H 'Content-Type: application/json' \
+     -d '{ "name": "Pelle", "move": "ROCK" }'
+
+# Server response (moves are omitted by the server to prevent cheating):
+{
+  "id": "7a285d3e-f892-4964-9da5-478356e9cc40",
+  "state": "WAITING_FOR_SECOND_MOVE",
+  "players": [{ "name": "Pelle" }, { "name": "Lisa" }],
+  "result": null
+}
+```
+
+4 - Lisa makes a move - `"SCISSORS"`
+
+```sh
+curl -X POST http://localhost:3000/api/games/7a285d3e-f892-4964-9da5-478356e9cc40/move \
+     -H 'Content-Type: application/json' \
+     -d '{ "name": "Lisa", "move": "SCISSORS" }'
+
+# Server response
+{
+  "id": "7a285d3e-f892-4964-9da5-478356e9cc40",
+  "state": "FINISHED",
+  "players": [{ "name": "Pelle" }, { "name": "Lisa" }],
+  "result": { "outcome": "WINNER", "winner": { "name": "Pelle" } },
+  "moves": [
+    { "name": "Pelle", "move": "ROCK" },
+    { "name": "Lisa", "move": "SCISSORS" }
+  ]
+}
+```
+
+5 - Pelle checks in on who won
+
+```sh
+curl -X GET http://localhost:3000/api/games/7a285d3e-f892-4964-9da5-478356e9cc40
+
+# Server response
+{
+  "id": "7a285d3e-f892-4964-9da5-478356e9cc40",
+  "state": "FINISHED",
+  "players": [{ "name": "Pelle" }, { "name": "Lisa" }],
+  "result": { "outcome": "WINNER", "winner": { "name": "Pelle" } },
+  "moves": [
+    { "name": "Pelle", "move": "ROCK" },
+    { "name": "Lisa", "move": "SCISSORS" }
+  ]
+}
 ```
