@@ -5,7 +5,9 @@ import { HttpMethod } from "../../types/http";
 import { init } from "../server";
 import { moveGamePath } from "./moveGame";
 
-const { afterEach, beforeEach, describe, it } = (exports.lab = Lab.script());
+const lab = Lab.script();
+const { beforeEach, afterEach, describe, it } = lab;
+export { lab };
 
 describe("Move Game endpoint", () => {
   let server: Server;
