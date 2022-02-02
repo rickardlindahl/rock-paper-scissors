@@ -25,7 +25,7 @@ describe("Game logic", () => {
   const playerHacker: Player = { name: "Hacker" };
 
   describe("Create game", () => {
-    it("returns a new game", () => {
+    it("should return a new game", () => {
       const expected: GameWaitingForPlayerToJoin = {
         id,
         state: State.WaitingForPlayerToJoin,
@@ -39,13 +39,13 @@ describe("Game logic", () => {
   });
 
   describe("Join game", () => {
-    it("throws an error when trying to join a new game and player names are equal", () => {
+    it("should throw an error when trying to join a new game and player names are equal", () => {
       const game = createGame(id, playerPelle);
 
       expect(() => joinGame(game, playerPelle)).to.throw("A player with that name has already joined the game");
     });
 
-    it(`throws an error when trying to join a game that is in state ${State.WaitingForFirstMove}`, () => {
+    it(`should throw an error when trying to join a game that is in state ${State.WaitingForFirstMove}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -57,7 +57,7 @@ describe("Game logic", () => {
       expect(() => joinGame(game, playerLisa)).to.throw("Game is not joinable");
     });
 
-    it(`throws an error when trying to join a game that is in state ${State.WaitingForSecondMove}`, () => {
+    it(`should throw an error when trying to join a game that is in state ${State.WaitingForSecondMove}`, () => {
       const game = makeMove(joinGame(createGame(id, playerPelle), playerLisa), {
         player: playerPelle,
         move: Move.Rock,
@@ -68,7 +68,7 @@ describe("Game logic", () => {
       expect(() => joinGame(game, playerLisa)).to.throw("Game is not joinable");
     });
 
-    it(`throws an error when trying to join a game that is in state ${State.Finished}`, () => {
+    it(`should throw an error when trying to join a game that is in state ${State.Finished}`, () => {
       const game: GameFinishedAsDraw = {
         id,
         state: State.Finished,
@@ -86,7 +86,7 @@ describe("Game logic", () => {
       expect(() => joinGame(game, playerLisa)).to.throw("Game is not joinable");
     });
 
-    it(`returns a game with state = ${State.WaitingForFirstMove} when successfully joining a new game`, () => {
+    it(`should return a game with state = ${State.WaitingForFirstMove} when successfully joining a new game`, () => {
       const game = createGame(id, playerPelle);
 
       const expected: GameWaitingForFirstMove = {
@@ -102,7 +102,7 @@ describe("Game logic", () => {
   });
 
   describe("Make move", () => {
-    it(`throws an error when trying to make a move on a game with state ${State.WaitingForPlayerToJoin}`, () => {
+    it(`should throw an error when trying to make a move on a game with state ${State.WaitingForPlayerToJoin}`, () => {
       const game = createGame(id, playerPelle);
 
       expect(() => makeMove(game, { player: playerPelle, move: Move.Paper })).to.throw(
@@ -110,7 +110,7 @@ describe("Game logic", () => {
       );
     });
 
-    it(`throws an error when trying to make a move on a game with state ${State.Finished}`, () => {
+    it(`should throw an error when trying to make a move on a game with state ${State.Finished}`, () => {
       const game: GameFinishedAsDraw = {
         id,
         state: State.Finished,
@@ -130,7 +130,7 @@ describe("Game logic", () => {
       );
     });
 
-    it("throws an error when trying to make a move with a player that is not a part of the game", () => {
+    it("should throw an error when trying to make a move with a player that is not a part of the game", () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -144,7 +144,7 @@ describe("Game logic", () => {
       );
     });
 
-    it("throws an error when trying to make a move with a player that has already made a move", () => {
+    it("should throw an error when trying to make a move with a player that has already made a move", () => {
       const game: GameWaitingForSecondMove = {
         id,
         state: State.WaitingForSecondMove,
@@ -156,7 +156,7 @@ describe("Game logic", () => {
       expect(() => makeMove(game, { player: playerPelle, move: Move.Rock })).to.throw("Player has already made a move");
     });
 
-    it(`returns a game with state ${State.WaitingForSecondMove} when the player who created the game makes the first move`, () => {
+    it(`should return a game with state ${State.WaitingForSecondMove} when the player who created the game makes the first move`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -176,7 +176,7 @@ describe("Game logic", () => {
       expect(makeMove(game, playerMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.WaitingForSecondMove} when the player who joined the game last makes the first move`, () => {
+    it(`should return a game with state ${State.WaitingForSecondMove} when the player who joined the game last makes the first move`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -196,7 +196,7 @@ describe("Game logic", () => {
       expect(makeMove(game, playerMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.Finished} and outcome ${Outcome.Draw} when the players makes the same move - ${Move.Rock}`, () => {
+    it(`should return a game with state ${State.Finished} and outcome ${Outcome.Draw} when the players makes the same move - ${Move.Rock}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -222,7 +222,7 @@ describe("Game logic", () => {
       expect(makeMove(makeMove(game, playerPelleMove), playerLisaMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.Finished} and outcome ${Outcome.Draw} when the players makes the same move - ${Move.Paper}`, () => {
+    it(`should return a game with state ${State.Finished} and outcome ${Outcome.Draw} when the players makes the same move - ${Move.Paper}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -248,7 +248,7 @@ describe("Game logic", () => {
       expect(makeMove(makeMove(game, playerPelleMove), playerLisaMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.Finished} and outcome ${Outcome.Draw} when the players makes the same move - ${Move.Scissors}`, () => {
+    it(`should return a game with state ${State.Finished} and outcome ${Outcome.Draw} when the players makes the same move - ${Move.Scissors}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -274,7 +274,7 @@ describe("Game logic", () => {
       expect(makeMove(makeMove(game, playerPelleMove), playerLisaMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Rock} vs ${Move.Scissors}`, () => {
+    it(`should return a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Rock} vs ${Move.Scissors}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -300,7 +300,7 @@ describe("Game logic", () => {
       expect(makeMove(makeMove(game, playerPelleMove), playerLisaMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Rock} vs ${Move.Paper}`, () => {
+    it(`should return a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Rock} vs ${Move.Paper}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -326,7 +326,7 @@ describe("Game logic", () => {
       expect(makeMove(makeMove(game, playerPelleMove), playerLisaMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Paper} vs ${Move.Rock}`, () => {
+    it(`should return a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Paper} vs ${Move.Rock}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -352,7 +352,7 @@ describe("Game logic", () => {
       expect(makeMove(makeMove(game, playerPelleMove), playerLisaMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Paper} vs ${Move.Scissors}`, () => {
+    it(`should return a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Paper} vs ${Move.Scissors}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -378,7 +378,7 @@ describe("Game logic", () => {
       expect(makeMove(makeMove(game, playerPelleMove), playerLisaMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Scissors} vs ${Move.Rock}`, () => {
+    it(`should return a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Scissors} vs ${Move.Rock}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
@@ -404,7 +404,7 @@ describe("Game logic", () => {
       expect(makeMove(makeMove(game, playerPelleMove), playerLisaMove)).to.equal(expected);
     });
 
-    it(`returns a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Scissors} vs ${Move.Paper}`, () => {
+    it(`should return a game with state ${State.Finished}, outcome ${Outcome.Winner} and correct winner when playing ${Move.Scissors} vs ${Move.Paper}`, () => {
       const game: GameWaitingForFirstMove = {
         id,
         state: State.WaitingForFirstMove,
