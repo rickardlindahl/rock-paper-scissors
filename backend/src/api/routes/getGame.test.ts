@@ -20,22 +20,6 @@ describe("Get Game endpoint", () => {
     await server.stop();
   });
 
-  const assertRouteNotFound = (path: string, httpMethod: HttpMethod) => {
-    describe(`${httpMethod} method`, () => {
-      it("responds with 404", async () => {
-        const res = await server.inject({
-          method: httpMethod,
-          url: path,
-        });
-        expect(res.statusCode).to.equal(404);
-      });
-    });
-  };
-
-  [HttpMethod.Delete, HttpMethod.Options, HttpMethod.Patch, HttpMethod.Put, HttpMethod.Post].map(httpMethod => {
-    assertRouteNotFound(getGamePath, httpMethod);
-  });
-
   describe(HttpMethod.Get, () => {
     it("responds with 501", async () => {
       const res = await server.inject({
