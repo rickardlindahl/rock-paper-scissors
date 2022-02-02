@@ -31,7 +31,7 @@ describe("Game logic", () => {
         state: State.WaitingForPlayerToJoin,
         players: [playerPelle],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       expect(createGame(id, playerPelle)).to.equal(expected);
@@ -51,7 +51,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       expect(() => joinGame(game, playerLisa)).to.throw("Game is not joinable");
@@ -79,7 +79,7 @@ describe("Game logic", () => {
         ],
         result: {
           outcome: Outcome.Draw,
-          winner: undefined,
+          winner: null,
         },
       };
 
@@ -94,7 +94,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       expect(joinGame(game, playerLisa)).to.equal(expected);
@@ -121,7 +121,7 @@ describe("Game logic", () => {
         ],
         result: {
           outcome: Outcome.Draw,
-          winner: undefined,
+          winner: null,
         },
       };
 
@@ -136,7 +136,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       expect(() => makeMove(game, { player: playerHacker, move: Move.Paper })).to.throw(
@@ -150,7 +150,7 @@ describe("Game logic", () => {
         state: State.WaitingForSecondMove,
         players: [playerPelle, playerLisa],
         moves: [{ player: playerPelle, move: Move.Paper }],
-        result: undefined,
+        result: null,
       };
 
       expect(() => makeMove(game, { player: playerPelle, move: Move.Rock })).to.throw("Player has already made a move");
@@ -162,7 +162,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerMove: PlayerMove = { player: playerPelle, move: Move.Rock };
@@ -182,7 +182,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerMove: PlayerMove = { player: playerLisa, move: Move.Rock };
@@ -202,7 +202,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Rock };
@@ -215,7 +215,7 @@ describe("Game logic", () => {
         moves: [playerPelleMove, playerLisaMove],
         result: {
           outcome: Outcome.Draw,
-          winner: undefined,
+          winner: null,
         },
       };
 
@@ -228,7 +228,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Paper };
@@ -241,7 +241,7 @@ describe("Game logic", () => {
         moves: [playerPelleMove, playerLisaMove],
         result: {
           outcome: Outcome.Draw,
-          winner: undefined,
+          winner: null,
         },
       };
 
@@ -254,7 +254,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Scissors };
@@ -267,7 +267,7 @@ describe("Game logic", () => {
         moves: [playerPelleMove, playerLisaMove],
         result: {
           outcome: Outcome.Draw,
-          winner: undefined,
+          winner: null,
         },
       };
 
@@ -280,7 +280,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Rock };
@@ -306,7 +306,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Rock };
@@ -332,7 +332,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Paper };
@@ -358,7 +358,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Paper };
@@ -384,7 +384,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Scissors };
@@ -410,7 +410,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       const playerPelleMove: PlayerMove = { player: playerPelle, move: Move.Scissors };
@@ -438,7 +438,7 @@ describe("Game logic", () => {
         state: State.WaitingForPlayerToJoin,
         players: [playerPelle],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       expect(getPublicViewModel(game)).to.equal(game);
@@ -450,7 +450,7 @@ describe("Game logic", () => {
         state: State.WaitingForFirstMove,
         players: [playerPelle, playerLisa],
         moves: [],
-        result: undefined,
+        result: null,
       };
 
       expect(getPublicViewModel(game)).to.equal(game);
@@ -462,12 +462,12 @@ describe("Game logic", () => {
         state: State.WaitingForSecondMove,
         players: [playerPelle, playerLisa],
         moves: [{ player: playerPelle, move: Move.Rock }],
-        result: undefined,
+        result: null,
       };
 
       expect(getPublicViewModel(game)).to.equal({
         ...game,
-        moves: undefined,
+        moves: null,
       });
     });
 
@@ -482,7 +482,7 @@ describe("Game logic", () => {
         ],
         result: {
           outcome: Outcome.Draw,
-          winner: undefined,
+          winner: null,
         },
       };
 

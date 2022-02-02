@@ -29,7 +29,7 @@ export type Players = [] | [Player] | [Player, Player];
 
 export type Moves = [] | [PlayerMove] | [PlayerMove, PlayerMove];
 
-export type Result = undefined | { outcome: Outcome.Draw } | { outcome: Outcome.Winner; winner: Player };
+export type Result = null | { outcome: Outcome.Draw; winner: null } | { outcome: Outcome.Winner; winner: Player };
 
 export interface RockPaperScissorsGame<S extends State, P = Players, M = Moves, R = Result> {
   id: string;
@@ -39,15 +39,15 @@ export interface RockPaperScissorsGame<S extends State, P = Players, M = Moves, 
   result: R;
 }
 
-export type GameWaitingForPlayerToJoin = RockPaperScissorsGame<State.WaitingForPlayerToJoin, [Player], [], undefined>;
+export type GameWaitingForPlayerToJoin = RockPaperScissorsGame<State.WaitingForPlayerToJoin, [Player], [], null>;
 
-export type GameWaitingForFirstMove = RockPaperScissorsGame<State.WaitingForFirstMove, [Player, Player], [], undefined>;
+export type GameWaitingForFirstMove = RockPaperScissorsGame<State.WaitingForFirstMove, [Player, Player], [], null>;
 
 export type GameWaitingForSecondMove = RockPaperScissorsGame<
   State.WaitingForSecondMove,
   [Player, Player],
   [PlayerMove],
-  undefined
+  null
 >;
 
 export type GameFinishedAsDraw = RockPaperScissorsGame<
@@ -56,7 +56,7 @@ export type GameFinishedAsDraw = RockPaperScissorsGame<
   [PlayerMove, PlayerMove],
   {
     outcome: Outcome.Draw;
-    winner: undefined;
+    winner: null;
   }
 >;
 

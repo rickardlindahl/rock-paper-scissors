@@ -30,7 +30,7 @@ export const createGame = (id: string, player: Player): GameWaitingForPlayerToJo
   state: State.WaitingForPlayerToJoin,
   players: [player],
   moves: [],
-  result: undefined,
+  result: null,
 });
 
 const isJoinableState = (game: Game): game is GameWaitingForPlayerToJoin => game.state === State.WaitingForPlayerToJoin;
@@ -76,7 +76,7 @@ const secondMove = (
       moves,
       result: {
         outcome: Outcome.Draw,
-        winner: undefined,
+        winner: null,
       },
     };
   }
@@ -119,7 +119,7 @@ export const makeMove = (game: Game, playerMove: PlayerMove) => {
 
 export const getPublicViewModel = (game: Game) => {
   if (game.state === State.WaitingForSecondMove) {
-    return { ...game, moves: undefined };
+    return { ...game, moves: null };
   }
 
   return game;
