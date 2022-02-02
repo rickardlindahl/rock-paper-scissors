@@ -1,5 +1,5 @@
 export class MoveForbiddenError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
 
     Object.setPrototypeOf(this, MoveForbiddenError.prototype);

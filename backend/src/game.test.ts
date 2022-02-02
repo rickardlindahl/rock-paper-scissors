@@ -467,10 +467,9 @@ describe("Game logic", () => {
         result: null,
       };
 
-      expect(getPublicViewModel(game)).to.equal({
-        ...game,
-        moves: null,
-      });
+      const { moves: _movesIgnored, ...expected } = game;
+
+      expect(getPublicViewModel(game)).to.equal(expected);
     });
 
     it(`should return all properties when state is ${State.Finished} and outcome is ${Outcome.Draw}`, () => {

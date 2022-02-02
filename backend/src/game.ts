@@ -117,9 +117,17 @@ export const makeMove = (game: Game, playerMove: PlayerMove) => {
     : secondMove(game as GameWaitingForSecondMove, playerMove);
 };
 
-export const getPublicViewModel = (game: Game) => {
+export const getPublicViewModel = (
+  game: Game,
+):
+  | GameWaitingForPlayerToJoin
+  | GameWaitingForFirstMove
+  | GameFinishedAsDraw
+  | GameFinishedWithWinner
+  | Omit<GameWaitingForSecondMove, "moves"> => {
   if (game.state === State.WaitingForSecondMove) {
-    return { ...game, moves: null };
+    const { moves: _removed, ...rest } = game;
+    return rest;
   }
 
   return game;

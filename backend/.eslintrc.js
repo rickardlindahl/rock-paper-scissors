@@ -17,7 +17,7 @@ module.exports = {
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     // TODO: fix these
     "@typescript-eslint/ban-types": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: ["[iI]gnored"] }],
   },
   overrides: [
     {

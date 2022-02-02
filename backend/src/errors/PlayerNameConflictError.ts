@@ -1,5 +1,5 @@
 export class PlayerNameConflictError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
 
     Object.setPrototypeOf(this, PlayerNameConflictError.prototype);
