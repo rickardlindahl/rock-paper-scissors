@@ -1,4 +1,7 @@
+import { GameNotJoinableError } from "./errors/GameNotJoinableError";
+import { PlayerNameConflictError } from "./errors/PlayerNameConflictError";
 import {
+  Game,
   GameFinishedAsDraw,
   GameFinishedWithWinner,
   GameWaitingForFirstMove,
@@ -29,11 +32,24 @@ export const createGame = (id: string, player: Player): GameWaitingForPlayerToJo
   result: undefined,
 });
 
-export const joinGame = (game: GameWaitingForPlayerToJoin, player: Player): GameWaitingForFirstMove => ({
-  ...game,
-  state: State.WaitingForFirstMove,
-  players: [game.players[0], player],
-});
+const isJoinableState = (g: Game): g is GameWaitingForPlayerToJoin => g.state === State.WaitingForPlayerToJoin;
+const isPlayerNameConflict = (player1: Player, player2: Player) => player1.name === player2.name;
+
+export const joinGame = (game: Game, player: Player): GameWaitingForFirstMove => {
+  if (!isJoinableState(game)) {
+    throw new GameNotJoinableError("Game is not joinable");
+  }
+
+  if (isPlayerNameConflict(game.players[0], player)) {
+    throw new PlayerNameConflictError("A player with that name has already joined the game");
+  }
+
+  return {
+    ...game,
+    state: State.WaitingForFirstMove,
+    players: [game.players[0], player],
+  };
+};
 
 export const firstMove = (game: GameWaitingForFirstMove, playerMove: PlayerMove): GameWaitingForSecondMove => ({
   ...game,

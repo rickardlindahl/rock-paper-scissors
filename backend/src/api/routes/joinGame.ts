@@ -1,8 +1,10 @@
 import * as Boom from "@hapi/boom";
 import * as Hapi from "@hapi/hapi";
+import { GameNotJoinableError } from "../../errors/GameNotJoinableError";
+import { PlayerNameConflictError } from "../../errors/PlayerNameConflictError";
 import { joinGame } from "../../game";
 import { store } from "../../store";
-import { Player, State } from "../../types/game";
+import { Player } from "../../types/game";
 import { HapiRequest } from "../../types/hapi";
 import { HttpMethod } from "../../types/http";
 import { validatePlayer } from "../validation";
@@ -22,19 +24,23 @@ export const joinGameRoute: Hapi.ServerRoute = {
       return Boom.notFound("Game does not exist");
     }
 
-    if (game.state !== State.WaitingForPlayerToJoin) {
-      return Boom.forbidden("Game is not joinable");
+    try {
+      const nextState = joinGame(game, player);
+
+      store.set(game.id, nextState);
+
+      return nextState;
+    } catch (e: unknown) {
+      if (e instanceof GameNotJoinableError) {
+        throw Boom.forbidden("Unable to join game", e);
+      }
+
+      if (e instanceof PlayerNameConflictError) {
+        throw Boom.conflict("Player name conflict", e);
+      }
+
+      throw Boom.badImplementation("Unable to join game", e);
     }
-
-    if (player.name === game.players[0].name) {
-      return Boom.conflict("A player with that name is already in the game. Please choose another name.");
-    }
-
-    const nextState = joinGame(game, player);
-
-    store.set(game.id, nextState);
-
-    return nextState;
   },
   options: {
     validate: {
