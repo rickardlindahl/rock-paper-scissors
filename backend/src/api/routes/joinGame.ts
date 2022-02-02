@@ -9,12 +9,10 @@ import { HapiRequest } from "../../types/hapi";
 import { HttpMethod } from "../../types/http";
 import { validatePlayer } from "../validation";
 
-export const joinGamePath = "/api/games/{id}/join";
-
 export const joinGameRoute: Hapi.ServerRoute = {
   method: HttpMethod.Post,
-  path: joinGamePath,
-  handler: (req: HapiRequest<Player>) => {
+  path: "/api/games/{id}/join",
+  handler: (req: HapiRequest<Player, { id: string }>) => {
     const player = req.payload;
     const gameId = req.params.id;
 
@@ -32,11 +30,11 @@ export const joinGameRoute: Hapi.ServerRoute = {
       return nextState;
     } catch (e: unknown) {
       if (e instanceof GameNotJoinableError) {
-        throw Boom.forbidden("Unable to join game", e);
+        throw Boom.forbidden("The game has already started or finished", e);
       }
 
       if (e instanceof PlayerNameConflictError) {
-        throw Boom.conflict("Player name conflict", e);
+        throw Boom.conflict("Player names must be unique", e);
       }
 
       throw Boom.badImplementation("Failed to join game", e);
