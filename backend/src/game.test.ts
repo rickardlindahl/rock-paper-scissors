@@ -26,24 +26,6 @@ describe("Game logic", () => {
   });
 
   describe("Join game", () => {
-    it(`returns a game with state = ${State.WaitingForFirstMove} when successfully joining a new game`, () => {
-      const id = "123";
-      const player1: Player = { name: "Rickard" };
-      const game = createGame(id, player1);
-
-      const player2: Player = { name: "Lindahl" };
-
-      const expected: GameWaitingForFirstMove = {
-        id,
-        state: State.WaitingForFirstMove,
-        players: [player1, player2],
-        moves: [],
-        result: undefined,
-      };
-
-      expect(joinGame(game, player2)).to.equal(expected);
-    });
-
     it("throws an error when trying to join a new game and player names are equal", () => {
       const id = "123";
       const player1: Player = { name: "Rickard" };
@@ -88,6 +70,24 @@ describe("Game logic", () => {
       expect(game.state).to.equal(State.Finished);
 
       expect(() => joinGame(game, player2)).to.throw("Game is not joinable");
+    });
+
+    it(`returns a game with state = ${State.WaitingForFirstMove} when successfully joining a new game`, () => {
+      const id = "123";
+      const player1: Player = { name: "Rickard" };
+      const game = createGame(id, player1);
+
+      const player2: Player = { name: "Lindahl" };
+
+      const expected: GameWaitingForFirstMove = {
+        id,
+        state: State.WaitingForFirstMove,
+        players: [player1, player2],
+        moves: [],
+        result: undefined,
+      };
+
+      expect(joinGame(game, player2)).to.equal(expected);
     });
   });
 });
