@@ -9,7 +9,7 @@ export { lab };
 
 describe("Game logic", () => {
   describe("Create game", () => {
-    it("Creates a new game", () => {
+    it("returns a new game", () => {
       const id = "123";
       const player: Player = { name: "Rickard" };
 
@@ -26,7 +26,7 @@ describe("Game logic", () => {
   });
 
   describe("Join game", () => {
-    it(`returns a game with state = ${State.WaitingForFirstMove} when joining a new game`, () => {
+    it(`returns a game with state = ${State.WaitingForFirstMove} when successfully joining a new game`, () => {
       const id = "123";
       const player1: Player = { name: "Rickard" };
       const game = createGame(id, player1);
@@ -51,7 +51,7 @@ describe("Game logic", () => {
 
       const player2: Player = { name: "Rickard" };
 
-      expect(() => joinGame(game, player2)).to.throw();
+      expect(() => joinGame(game, player2)).to.throw("A player with that name has already joined the game");
     });
 
     it(`throws an error when trying to join a game that is in state ${State.WaitingForFirstMove}`, () => {
@@ -62,7 +62,7 @@ describe("Game logic", () => {
 
       expect(game.state).to.equal(State.WaitingForFirstMove);
 
-      expect(() => joinGame(game, player2)).to.throw();
+      expect(() => joinGame(game, player2)).to.throw("Game is not joinable");
     });
 
     it(`throws an error when trying to join a game that is in state ${State.WaitingForSecondMove}`, () => {
@@ -73,7 +73,7 @@ describe("Game logic", () => {
 
       expect(game.state).to.equal(State.WaitingForSecondMove);
 
-      expect(() => joinGame(game, player2)).to.throw();
+      expect(() => joinGame(game, player2)).to.throw("Game is not joinable");
     });
 
     it(`throws an error when trying to join a game that is in state ${State.Finished}`, () => {
@@ -87,7 +87,7 @@ describe("Game logic", () => {
 
       expect(game.state).to.equal(State.Finished);
 
-      expect(() => joinGame(game, player2)).to.throw();
+      expect(() => joinGame(game, player2)).to.throw("Game is not joinable");
     });
   });
 });
