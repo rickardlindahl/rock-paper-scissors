@@ -17,7 +17,7 @@ const winMap: { [key in Move]: Move } = {
   [Move.Scissors]: Move.Paper,
 };
 
-const move1WinsOver = (move1: Move, move2: Move): boolean => winMap[move1] === move2;
+const isMove1Winner = (move1: Move, move2: Move): boolean => winMap[move1] === move2;
 
 const isDraw = (move1: Move, move2: Move): boolean => move1 === move2;
 
@@ -70,7 +70,7 @@ export const secondMove = (
     moves,
     result: {
       outcome: Outcome.Winner,
-      winner: move1WinsOver(move1.move, playerMove.move) ? move1.player : playerMove.player,
+      winner: isMove1Winner(move1.move, playerMove.move) ? move1.player : playerMove.player,
     },
   };
 };
