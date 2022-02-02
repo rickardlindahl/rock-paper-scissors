@@ -97,8 +97,7 @@ const isWaitingForSecondMove = (game: Game): game is GameWaitingForSecondMove =>
   game.state === State.WaitingForSecondMove;
 const isPossibleToMakeMove = (game: Game) => isWaitingForFirstMove(game) || isWaitingForSecondMove(game);
 const isPlayerPartOfTheGame = (game: Game, player: Player) => !!game.players.find(({ name }) => name === player.name);
-const hasPlayerMadeMove = (game: GameWaitingForFirstMove | GameWaitingForSecondMove, player: Player) =>
-  !!game.moves.find(({ name }) => name === player.name);
+const hasPlayerMadeMove = (game: Game, player: Player) => !!game.moves.find(({ name }) => name === player.name);
 
 export const makeMove = (game: Game, playerMove: PlayerMove) => {
   if (!isPossibleToMakeMove(game)) {
@@ -109,7 +108,7 @@ export const makeMove = (game: Game, playerMove: PlayerMove) => {
     throw new MoveForbiddenError("Player making move is not part of this game");
   }
 
-  if (hasPlayerMadeMove) {
+  if (hasPlayerMadeMove(game, playerMove.player)) {
     throw new MoveForbiddenError("Player has already made a move");
   }
 
