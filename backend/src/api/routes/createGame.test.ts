@@ -117,9 +117,9 @@ describe("Create Game endpoint", () => {
       });
 
       expect(res.statusCode).to.equal(200);
-      expect(res.payload).to.match(
-        /^{"id":"[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}"}/,
-      );
+
+      const response = JSON.parse(res.payload);
+      expect(response.id).to.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}/);
     });
   });
 });
