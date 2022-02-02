@@ -11,7 +11,7 @@
     "lint:types": "npm run build -- --noEmit",
     "lint:eslint": "eslint \"**/*.ts\"",
     "start": "node dist/index.js",
-    "test": "lab --sourcemaps --typescript -v src/api/**/*.test.ts",
+    "test": "lab --sourcemaps --typescript -v src -P test",
     "watch:node": "nodemon dist/index.js",
     "watch:ts": "npm run build -- -w",
     "watch:test": "nodemon --watch src --ext ts --exec \"npm run test\""
