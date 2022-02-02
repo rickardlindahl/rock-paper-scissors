@@ -86,7 +86,7 @@ describe("Game logic", () => {
       expect(() => joinGame(game, playerLisa)).to.throw("Game is not joinable");
     });
 
-    it(`should return a game with state = ${State.WaitingForFirstMove} when successfully joining a new game`, () => {
+    it(`should return a game with state ${State.WaitingForFirstMove} when successfully joining a new game`, () => {
       const game = createGame(id, playerPelle);
 
       const expected: GameWaitingForFirstMove = {
