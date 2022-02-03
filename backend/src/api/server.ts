@@ -10,6 +10,11 @@ export const init = async () => {
     host: "localhost",
   });
 
+  await server.register({
+    plugin: require("laabr"),
+    options: {},
+  });
+
   server.route(joinGameRoute);
 
   server.route(moveGameRoute);
